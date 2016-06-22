@@ -6,7 +6,7 @@ using namespace std;
 
 class BigInteger {
 public:
-    string number,mod;
+    string number,mod,sign="";
 
     BigInteger () {};
     BigInteger ( string number ) {
@@ -39,10 +39,23 @@ public:
     BigInteger operator - ( BigInteger param ) {
         int l1,l2,i,m,n,hold,diff;
         string sub;
+        BigInteger c;
 
         l1 = number.size();
         l2 = param.number.size();
-        if( l1 == l2 && number == param.number ) {
+        c.sign = "";
+        if(l1<l2) {
+            swap(l1, l2);
+            swap(number, param.number);
+            c.sign = "-";
+        }
+        else if(l1 == l2) {
+            if(number < param.number) {
+                swap(number, param.number);
+                c.sign = "-";
+            }
+        }
+        else if( l1 == l2 && number == param.number ) {
             sub = "0";
             number = sub;
             return number;
@@ -64,8 +77,8 @@ public:
         }
         sub.erase(i+1);
         reverse( sub.begin(),sub.end() );
-        number = sub;
-        return number;
+        c.number = sub;
+        return c;
     }
 
     BigInteger operator * (BigInteger param) {
@@ -142,7 +155,7 @@ public:
             }//else 20/12
             add = "1";
             while( true ) {
-                a = param.number;
+                a = param.number; // a.number = param.number, a.mod, a.sign = garbage value
                 b = add;
                 c = a * b;
                 prod = c.number;
@@ -219,7 +232,7 @@ int main()
         if( sign == "/" ) c = a / b;
         if( sign == "%" ) c = a % b;
 
-        cout << c.number << endl;
+        cout << c.sign << c.number << endl;
     }
     return 0;
 }
