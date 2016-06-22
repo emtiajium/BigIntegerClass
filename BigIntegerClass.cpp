@@ -13,11 +13,30 @@ public:
         this -> number = number;
     }
 
+    string removeLeadingZero ( string number ) {
+        int i,j;
+
+        for( i=j=0; number[i]; i++ ) {//leading zero
+            if( number[i]>48 ) {
+                j++;
+                break;
+            }
+        }
+        if( j==0 ) return "0";
+        for( j=i,i=0; number[j]; j++ ) {
+            number[i++] = number[j];
+        }
+        number.erase(i);
+        return number;
+    }
+
     BigInteger operator + ( BigInteger param ) {
 
         int m,n,l1,l2,i,hold,sum;
         string add;
 
+        number = removeLeadingZero( number );
+        param.number = removeLeadingZero( param.number );
         l1 = number.size();
         l2 = param.number.size();
         if(l2>l1) {
@@ -32,7 +51,7 @@ public:
         }
         if( hold ) add += hold + 48;
         reverse( add.begin(),add.end() );
-        number = add;
+        number = removeLeadingZero(add);
         return number;
     }
 
@@ -41,6 +60,8 @@ public:
         string sub;
         BigInteger c;
 
+        number = removeLeadingZero( number );
+        param.number = removeLeadingZero( param.number );
         l1 = number.size();
         l2 = param.number.size();
         c.sign = "";
@@ -77,7 +98,7 @@ public:
         }
         sub.erase(i+1);
         reverse( sub.begin(),sub.end() );
-        c.number = sub;
+        c.number = removeLeadingZero(sub);
         return c;
     }
 
@@ -86,6 +107,8 @@ public:
         string temp,prod="0";
         BigInteger a,b,c;
 
+        number = removeLeadingZero( number );
+        param.number = removeLeadingZero( param.number );
         l1 = number.size();
         l2 = param.number.size();
         if( l1<l2 ){
@@ -111,7 +134,7 @@ public:
             prod = c.number;
             temp.erase( temp.begin(),temp.end() );
         }
-        number = prod;
+        number = removeLeadingZero(prod);
         return number;
     }
 
@@ -121,6 +144,8 @@ public:
         string quotient,mod,add,prod,tdivident,tquotient;
         BigInteger a,b,c;
 
+        number = removeLeadingZero( number );
+        param.number = removeLeadingZero( param.number );
         if( param.number == "0" ) {
             c.number = c.mod = "UNDEFINED";
             return c;
@@ -184,21 +209,8 @@ public:
             if( mod == "0" ) tdivident.erase( tdivident.begin(),tdivident.end() );
             else tdivident = mod;
         }
-        for( i=j=0; quotient[i]; i++ ) {//leading zero
-            if( quotient[i]>48 ) {
-                j++;
-                break;
-            }
-        }
-        if( j==0 ) quotient = "0";
-        else {
-            for( j=i,i=0; quotient[j]; j++ ) {
-                quotient[i++] = quotient[j];
-            }
-            quotient.erase(i);
-        }
-        c.number = quotient;
-        c.mod = mod;
+        c.number = removeLeadingZero(quotient);
+        c.mod = removeLeadingZero(mod);
         return c;
     }
 
@@ -217,6 +229,7 @@ int main()
     //freopen("output.txt","w",stdout);
 
     string s,sign,s2;
+    cout << "Input Pattern: Number1 Sign Number2\n\n";
 
     while( cin >> s >> sign >> s2 ){
 
